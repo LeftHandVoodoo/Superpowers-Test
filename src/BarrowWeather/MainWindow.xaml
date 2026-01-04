@@ -7,14 +7,14 @@
     xmlns:controls="using:BarrowWeather.Controls"
     Title="Barrow Weather">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Padding="24">
+    <Grid x:Name="RootGrid" Background="{StaticResource ClearSkyGradient}" Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,16">
+        <Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -22,17 +22,26 @@
 
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Barrow (Utqiagvik), Alaska"
-                           Style="{StaticResource TitleTextBlockStyle}"/>
-                <TextBlock x:Name="LastUpdatedText"
-                           Style="{StaticResource CaptionTextBlockStyle}"
-                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                           FontSize="28"
+                           FontWeight="SemiBold"
+                           Foreground="White"/>
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                    <Ellipse x:Name="FreshIndicator"
+                             Width="8" Height="8"
+                             Fill="{StaticResource FreshDataBrush}"
+                             Visibility="Collapsed"/>
+                    <TextBlock x:Name="LastUpdatedText"
+                               FontSize="13"
+                               Foreground="#B0BEC5"/>
+                </StackPanel>
             </StackPanel>
 
             <Button x:Name="RefreshButton"
                     Grid.Column="1"
+                    Style="{StaticResource AccentButtonStyle}"
                     Click="RefreshButton_Click">
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <FontIcon Glyph="&#xE72C;" FontSize="16"/>
+                    <FontIcon x:Name="RefreshIcon" Glyph="&#xE72C;" FontSize="16"/>
                     <TextBlock Text="Refresh"/>
                 </StackPanel>
             </Button>
@@ -42,7 +51,9 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel x:Name="ContentPanel" Spacing="16">
                 <!-- Loading indicator -->
-                <ProgressRing x:Name="LoadingRing" IsActive="False"/>
+                <ProgressRing x:Name="LoadingRing"
+                              IsActive="False"
+                              Foreground="{StaticResource SkyBlueAccentBrush}"/>
 
                 <!-- Error message -->
                 <InfoBar x:Name="ErrorBar"
@@ -66,7 +77,8 @@
                 <!-- Placeholder -->
                 <TextBlock x:Name="PlaceholderText"
                            Text="Click Refresh to load weather data"
-                           Style="{StaticResource BodyTextBlockStyle}"
+                           FontSize="16"
+                           Foreground="#90A4AE"
                            HorizontalAlignment="Center"
                            Margin="0,100,0,0"/>
             </StackPanel>

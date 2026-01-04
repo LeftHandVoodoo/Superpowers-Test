@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Sky Blue Accent Colors -->
+    <Color x:Key="SkyBlueAccent">#0078D4</Color>
+    <Color x:Key="SkyBlueLight">#4BA0E8</Color>
+    <Color x:Key="SkyBlueDark">#005A9E</Color>
+
+    <!-- Background Gradient Colors -->
+    <Color x:Key="ClearSkyStart">#1a3a5c</Color>
+    <Color x:Key="ClearSkyEnd">#4a7ba7</Color>
+    <Color x:Key="CloudyStart">#4a5568</Color>
+    <Color x:Key="CloudyEnd">#718096</Color>
+    <Color x:Key="SnowStart">#2d3748</Color>
+    <Color x:Key="SnowEnd">#4a5568</Color>
+    <Color x:Key="NightStart">#1a202c</Color>
+    <Color x:Key="NightEnd">#2d3748</Color>
+
+    <!-- Temperature Tint Colors -->
+    <Color x:Key="IcyBlueTint">#E3F2FD</Color>
+    <Color x:Key="CoolBlueTint">#BBDEFB</Color>
+    <Color x:Key="WarmTint">#FFF8E1</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="SkyBlueAccentBrush" Color="{StaticResource SkyBlueAccent}"/>
+    <SolidColorBrush x:Key="SkyBlueLightBrush" Color="{StaticResource SkyBlueLight}"/>
+    <SolidColorBrush x:Key="SkyBlueDarkBrush" Color="{StaticResource SkyBlueDark}"/>
+
+    <!-- Default Background Gradient (Clear Sky) -->
+    <LinearGradientBrush x:Key="ClearSkyGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource ClearSkyStart}" Offset="0"/>
+        <GradientStop Color="{StaticResource ClearSkyEnd}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="CloudyGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource CloudyStart}" Offset="0"/>
+        <GradientStop Color="{StaticResource CloudyEnd}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="SnowGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource SnowStart}" Offset="0"/>
+        <GradientStop Color="{StaticResource SnowEnd}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="NightGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource NightStart}" Offset="0"/>
+        <GradientStop Color="{StaticResource NightEnd}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Frosted Glass Card Style -->
+    <Style x:Key="FrostedCardStyle" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <AcrylicBrush TintColor="#1a1a2e"
+                              TintOpacity="0.6"
+                              FallbackColor="#2d2d44"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="White" Opacity="0.1"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="24"/>
+    </Style>
+
+    <!-- Hero Card Style (Current Conditions) -->
+    <Style x:Key="HeroCardStyle" TargetType="Border" BasedOn="{StaticResource FrostedCardStyle}">
+        <Setter Property="Padding" Value="32"/>
+    </Style>
+
+    <!-- Accent Button Style -->
+    <Style x:Key="AccentButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource SkyBlueAccentBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="Padding" Value="16,10"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- Temperature Display Style -->
+    <Style x:Key="HeroTemperatureStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="96"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource SkyBlueAccentBrush}"/>
+    </Style>
+
+    <!-- Card Header Style -->
+    <Style x:Key="CardHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Margin" Value="0,0,0,12"/>
+    </Style>
+
+    <!-- Section Header with Accent Underline -->
+    <Style x:Key="AccentHeaderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource SkyBlueAccentBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,2"/>
+        <Setter Property="Padding" Value="0,0,0,8"/>
+        <Setter Property="Margin" Value="0,0,0,12"/>
+    </Style>
+
+    <!-- Highlight Row Style -->
+    <Style x:Key="HighlightRowStyle" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{StaticResource SkyBlueAccent}" Opacity="0.2"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="8"/>
+    </Style>
+
+    <!-- Today Indicator Style -->
+    <Style x:Key="TodayIndicatorStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource SkyBlueAccentBrush}"/>
+        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+
+    <!-- Icon Colors -->
+    <SolidColorBrush x:Key="SunIconBrush" Color="#FFD700"/>
+    <SolidColorBrush x:Key="CloudIconBrush" Color="#A0AEC0"/>
+    <SolidColorBrush x:Key="SnowIconBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="WindIconBrush" Color="#90CDF4"/>
+    <SolidColorBrush x:Key="HumidityIconBrush" Color="#63B3ED"/>
+
+    <!-- Fresh Data Indicator -->
+    <SolidColorBrush x:Key="FreshDataBrush" Color="#48BB78"/>
+
+    <!-- Staggered Fade-In Animation -->
+    <Storyboard x:Key="FadeInStoryboard">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="0" To="1" Duration="0:0:0.3">
+            <DoubleAnimation.EasingFunction>
+                <QuadraticEase EasingMode="EaseOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <!-- Pulse Animation for Fresh Data -->
+    <Storyboard x:Key="PulseStoryboard" RepeatBehavior="Forever">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="1" To="0.4" Duration="0:0:1" AutoReverse="True">
+            <DoubleAnimation.EasingFunction>
+                <SineEase EasingMode="EaseInOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <!-- Alert Pulse Animation -->
+    <Storyboard x:Key="AlertPulseStoryboard" RepeatBehavior="Forever">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                         From="1" To="0.6" Duration="0:0:1" AutoReverse="True">
+            <DoubleAnimation.EasingFunction>
+                <SineEase EasingMode="EaseInOut"/>
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+</ResourceDictionary>
