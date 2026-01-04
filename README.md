@@ -15,17 +15,47 @@ A Windows 11 desktop application that displays weather conditions for Barrow (Ut
 ## Technology
 
 - C# / .NET 8
-- WinUI 3 (Windows App SDK)
+- WinUI 3 (Windows App SDK 1.5)
 - National Weather Service API (free, no API key required)
+
+## Prerequisites
+
+- Windows 10 (build 17763) or Windows 11
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
 ## Building
 
-Requires:
-- Visual Studio 2022 with .NET desktop development workload
-- Windows App SDK 1.5+
+```bash
+dotnet build BarrowWeather.sln -p:Platform=x64
+```
+
+Supported platforms: `x64`, `x86`, `ARM64`
+
+## Running
 
 ```bash
-dotnet build BarrowWeather.sln
+dotnet run --project src/BarrowWeather/BarrowWeather.csproj -p:Platform=x64
+```
+
+Or run the built executable directly:
+```
+src\BarrowWeather\bin\x64\Debug\net8.0-windows10.0.19041.0\BarrowWeather.exe
+```
+
+## Testing
+
+```bash
+dotnet test
+```
+
+## Project Structure
+
+```
+src/
+├── BarrowWeather/        # WinUI 3 desktop app
+└── BarrowWeather.Core/   # Core library (models, services, API)
+tests/
+└── BarrowWeather.Tests/  # xUnit tests
 ```
 
 ## License
