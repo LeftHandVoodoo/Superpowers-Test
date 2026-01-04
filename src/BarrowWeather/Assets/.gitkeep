@@ -1,0 +1,10 @@
+# Placeholder assets directory
+# 
+# For MSIX packaging, you'll need to add:
+# - StoreLogo.png (50x50)
+# - Square150x150Logo.png (150x150)
+# - Square44x44Logo.png (44x44)
+# - Wide310x150Logo.png (310x150)
+# - SplashScreen.png (620x300)
+#
+# These can be created using any image editor or generated programmatically.

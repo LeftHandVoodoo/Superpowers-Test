@@ -48,6 +48,53 @@ src\BarrowWeather\bin\x64\Debug\net8.0-windows10.0.19041.0\BarrowWeather.exe
 dotnet test
 ```
 
+## Building Releases
+
+### Local Build
+
+Build release packages for all platforms:
+
+```bash
+python build_release.py
+```
+
+Build for a specific platform:
+
+```bash
+python build_release.py --platform x64
+```
+
+### Creating a GitHub Release
+
+1. Update the version in `VERSION` file
+2. Update `CHANGELOG.md` with release notes
+3. Create and push a git tag:
+
+```bash
+python create_release.py
+```
+
+Or manually:
+
+```bash
+git tag -a v0.2.1 -m "Release 0.2.1"
+git push origin v0.2.1
+```
+
+The GitHub Actions workflow will automatically:
+- Build the application for all platforms (x64, x86, ARM64)
+- Create MSIX installers
+- Create ZIP archives
+- Create a GitHub release with all artifacts
+
+### Installing from Release
+
+1. Download the MSIX package from the [Releases](https://github.com/yourusername/BarrowWeather/releases) page
+2. Double-click the `.msix` file to install
+3. The app will appear in your Start menu
+
+**Note:** MSIX packages require Windows 10 (build 17763) or later.
+
 ## Project Structure
 
 ```

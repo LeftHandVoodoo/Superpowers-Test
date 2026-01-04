@@ -31,4 +31,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BarrowWeather.Core\BarrowWeather.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageCertificateKeyFile Condition="'$(Configuration)' == 'Release'">BarrowWeather_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </ItemGroup>
 </Project>

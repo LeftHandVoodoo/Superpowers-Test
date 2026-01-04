@@ -1,0 +1,169 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.2.1)'
+        required: true
+        type: string
+
+jobs:
+  build-and-package:
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        platform: [x64, x86, ARM64]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: Determine version
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF -like 'refs/tags/v*') {
+            $version = $env:GITHUB_REF -replace 'refs/tags/v', ''
+          } else {
+            $version = '${{ github.event.inputs.version }}'
+          }
+          Write-Host "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Version: $version"
+      
+      - name: Update VERSION file
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          Set-Content -Path VERSION -Value $version
+      
+      - name: Update Package.appxmanifest version
+        shell: pwsh
+        run: |
+          $version = '${{ steps.version.outputs.version }}'
+          $manifestPath = "src/BarrowWeather/Package.appxmanifest"
+          if (Test-Path $manifestPath) {
+            $content = Get-Content $manifestPath -Raw
+            $versionParts = $version.Split('.')
+            if ($versionParts.Length -lt 3) {
+              $versionParts += @('0') * (3 - $versionParts.Length)
+            }
+            $manifestVersion = "$($versionParts[0]).$($versionParts[1]).$($versionParts[2]).0"
+            $content = $content -replace 'Version="[^"]*"', "Version=`"$manifestVersion`""
+            Set-Content -Path $manifestPath -Value $content
+            Write-Host "Updated manifest version to $manifestVersion"
+          }
+      
+      - name: Restore dependencies
+        run: dotnet restore BarrowWeather.sln
+      
+      - name: Build project
+        run: |
+          dotnet build src/BarrowWeather/BarrowWeather.csproj `
+            -p:Platform=${{ matrix.platform }} `
+            -c Release `
+            --no-restore
+      
+      - name: Publish application
+        run: |
+          dotnet publish src/BarrowWeather/BarrowWeather.csproj `
+            -p:Platform=${{ matrix.platform }} `
+            -c Release `
+            -p:RuntimeIdentifier=win-${{ matrix.platform }} `
+            -p:SelfContained=true `
+            -p:PublishSingleFile=false `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o release/${{ matrix.platform }} `
+            --no-build
+      
+      - name: Create MSIX package
+        run: |
+          dotnet publish src/BarrowWeather/BarrowWeather.csproj `
+            -p:Platform=${{ matrix.platform }} `
+            -c Release `
+            -p:RuntimeIdentifier=win-${{ matrix.platform }} `
+            -p:SelfContained=true `
+            -p:AppxPackageOutputDir=release `
+            -p:AppxPackageName=BarrowWeather `
+            -p:AppxPackageVersion=${{ steps.version.outputs.version }}.0
+        continue-on-error: true
+      
+      - name: Create ZIP archive
+        shell: pwsh
+        run: |
+          $platform = '${{ matrix.platform }}'
+          $version = '${{ steps.version.outputs.version }}'
+          $zipName = "BarrowWeather-$version-$platform.zip"
+          Compress-Archive -Path "release/$platform/*" -DestinationPath "release/$zipName" -Force
+          Write-Host "Created $zipName"
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: BarrowWeather-${{ matrix.platform }}-${{ steps.version.outputs.version }}
+          path: |
+            release/${{ matrix.platform }}/**
+            release/*.msix
+            release/*.zip
+          if-no-files-found: warn
+          retention-days: 90
+  
+  create-release:
+    needs: build-and-package
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.create_release != 'false'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Determine version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Barrow Weather ${{ steps.version.outputs.version }}
+          body: |
+            ## Barrow Weather ${{ steps.version.outputs.version }}
+            
+            See [CHANGELOG.md](CHANGELOG.md) for details.
+            
+            ### Downloads
+            
+            Installers are available for x64, x86, and ARM64 platforms.
+            
+            **Note:** MSIX packages require Windows 10 (build 17763) or later.
+          files: |
+            artifacts/**/*.msix
+            artifacts/**/*.zip
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') || contains(steps.version.outputs.version, 'alpha') || contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

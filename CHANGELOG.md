@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `run.py` Python script for launching the application with platform and configuration options
+- `build_release.py` script for building release packages and MSIX installers
+- `create_release.py` script for creating GitHub releases
+- GitHub Actions workflow for automated release builds and packaging
+- MSIX packaging support with `Package.appxmanifest`
+- Release documentation in README.md
+
 ## [0.2.1] - 2026-01-04
 
 ### Added
