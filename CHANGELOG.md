@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-01-04
+
+### Fixed
+- Cache file corruption on crash (now uses atomic write with temp file + rename)
+- Silent exception swallowing in cache load (now catches specific JsonException/IOException)
+- Unhandled exceptions in background cache loading (added try/catch with error reporting)
+- Potential race condition in NWS API initialization (added SemaphoreSlim for thread safety)
+- Unhandled exceptions in auto-refresh timer (wrapped async handler in try/catch)
+- Build error in csproj (changed ItemGroup to PropertyGroup for PackageCertificateKeyFile)
+
 ## [0.2.2] - 2026-01-04
 
 ### Added
