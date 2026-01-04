@@ -98,7 +98,7 @@ Before publishing:
 2. Test the MSIX installer:
    ```bash
    # Install
-   Add-AppxPackage release/BarrowWeather-0.2.1-x64.msix
+   Add-AppxPackage release/BarrowWeather-0.2.3-x64.msix
    
    # Uninstall
    Remove-AppxPackage BarrowWeather

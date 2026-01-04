@@ -77,8 +77,8 @@ python create_release.py
 Or manually:
 
 ```bash
-git tag -a v0.2.1 -m "Release 0.2.1"
-git push origin v0.2.1
+git tag -a v0.2.3 -m "Release 0.2.3"
+git push origin v0.2.3
 ```
 
 The GitHub Actions workflow will automatically:
@@ -89,7 +89,7 @@ The GitHub Actions workflow will automatically:
 
 ### Installing from Release
 
-1. Download the MSIX package from the [Releases](https://github.com/yourusername/BarrowWeather/releases) page
+1. Download the MSIX package from the [Releases](https://github.com/LeftHandVoodoo/Superpowers-Test/releases) page
 2. Double-click the `.msix` file to install
 3. The app will appear in your Start menu
 
@@ -100,10 +100,20 @@ The GitHub Actions workflow will automatically:
 ```
 src/
 ├── BarrowWeather/        # WinUI 3 desktop app
+│   ├── Assets/          # App icons and images for MSIX packaging
+│   └── Package.appxmanifest  # MSIX package manifest
 └── BarrowWeather.Core/   # Core library (models, services, API)
 tests/
 └── BarrowWeather.Tests/  # xUnit tests
+.github/
+└── workflows/
+    └── release.yml       # GitHub Actions release workflow
 ```
+
+Root-level scripts:
+- `run.py` - Launch the application
+- `build_release.py` - Build release packages
+- `create_release.py` - Create GitHub releases
 
 ## License
 

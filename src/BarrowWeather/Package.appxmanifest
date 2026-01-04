@@ -9,7 +9,7 @@
   <Identity
     Name="BarrowWeather"
     Publisher="CN=LeftHandVoodoo"
-    Version="0.2.1.0" />
+    Version="0.2.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="b8b8b8b8-b8b8-b8b8-b8b8-b8b8b8b8b8b8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
