@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Centralized theme system with Sky Blue accent color (#0078D4)
+- Dynamic gradient backgrounds based on weather conditions (clear, cloudy, snow, night)
+- Frosted glass card styling using AcrylicBrush
+- Hero temperature display (96px) in sky blue
+- Current hour highlight in hourly forecast
+- Today row highlight in daily forecast
+- Refresh button rotation animation during loading
+- Fresh data indicator (green dot) for data less than 5 minutes old
+- Temperature-to-color converters for visual temperature cues
+- Accent-styled card headers with underline
+
+### Changed
+- Updated all cards to use frosted glass appearance
+- Improved alerts card with orange warning styling
+- Enhanced visual hierarchy with consistent spacing and typography
+
 ## [0.1.0] - 2026-01-04
 
 ### Added
