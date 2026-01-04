@@ -17,7 +17,19 @@ public class RefreshTimer
         {
             Interval = Interval
         };
-        _timer.Tick += async (s, e) => await _refreshAction();
+        _timer.Tick += OnTimerTick;
+    }
+
+    private async void OnTimerTick(object? sender, object e)
+    {
+        try
+        {
+            await _refreshAction();
+        }
+        catch (Exception)
+        {
+            // Refresh failure is handled by the ViewModel; don't crash the app
+        }
     }
 
     public void Start()

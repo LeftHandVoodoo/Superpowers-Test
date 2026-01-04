@@ -11,6 +11,7 @@ public class NwsWeatherService : IWeatherService
     private const string BaseUrl = "https://api.weather.gov";
 
     private readonly HttpClient _httpClient;
+    private readonly SemaphoreSlim _initLock = new(1, 1);
     private NwsPointsProperties? _cachedPointsData;
     private string? _cachedStationId;
 
@@ -118,20 +119,43 @@ public class NwsWeatherService : IWeatherService
     {
         if (_cachedPointsData != null) return;
 
-        var url = $"{BaseUrl}/points/{BarrowLatitude},{BarrowLongitude}";
-        var response = await _httpClient.GetFromJsonAsync<NwsPointsResponse>(url);
-        _cachedPointsData = response?.Properties;
+        await _initLock.WaitAsync();
+        try
+        {
+            // Double-check after acquiring lock
+            if (_cachedPointsData != null) return;
+
+            var url = $"{BaseUrl}/points/{BarrowLatitude},{BarrowLongitude}";
+            var response = await _httpClient.GetFromJsonAsync<NwsPointsResponse>(url);
+            _cachedPointsData = response?.Properties;
+        }
+        finally
+        {
+            _initLock.Release();
+        }
     }
 
     private async Task EnsureStationIdAsync()
     {
+        // Ensure points data first (has its own lock)
+        await EnsurePointsDataAsync();
+
         if (_cachedStationId != null) return;
 
-        await EnsurePointsDataAsync();
-        if (_cachedPointsData?.ObservationStationsUrl == null) return;
+        await _initLock.WaitAsync();
+        try
+        {
+            // Double-check after acquiring lock
+            if (_cachedStationId != null) return;
+            if (_cachedPointsData?.ObservationStationsUrl == null) return;
 
-        var response = await _httpClient.GetFromJsonAsync<NwsStationsResponse>(_cachedPointsData.ObservationStationsUrl);
-        _cachedStationId = response?.Features?.FirstOrDefault()?.Properties?.StationIdentifier;
+            var response = await _httpClient.GetFromJsonAsync<NwsStationsResponse>(_cachedPointsData.ObservationStationsUrl);
+            _cachedStationId = response?.Features?.FirstOrDefault()?.Properties?.StationIdentifier;
+        }
+        finally
+        {
+            _initLock.Release();
+        }
     }
 
     private static double CelsiusToFahrenheit(double? celsius)

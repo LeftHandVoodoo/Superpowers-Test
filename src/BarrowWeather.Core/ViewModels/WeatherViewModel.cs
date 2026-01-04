@@ -49,16 +49,24 @@ public partial class WeatherViewModel : ObservableObject
 
     private async Task LoadCachedDataAsync()
     {
-        var cached = await _cache.LoadAsync();
-        if (cached != null)
+        try
         {
-            CurrentConditions = cached.CurrentConditions;
-            SunData = cached.SunData;
-            foreach (var f in cached.HourlyForecasts) HourlyForecasts.Add(f);
-            foreach (var f in cached.DailyForecasts) DailyForecasts.Add(f);
-            foreach (var a in cached.Alerts) Alerts.Add(a);
-            LastUpdated = cached.CachedAt;
-            OnPropertyChanged(nameof(HasAlerts));
+            var cached = await _cache.LoadAsync();
+            if (cached != null)
+            {
+                CurrentConditions = cached.CurrentConditions;
+                SunData = cached.SunData;
+                foreach (var f in cached.HourlyForecasts) HourlyForecasts.Add(f);
+                foreach (var f in cached.DailyForecasts) DailyForecasts.Add(f);
+                foreach (var a in cached.Alerts) Alerts.Add(a);
+                LastUpdated = cached.CachedAt;
+                OnPropertyChanged(nameof(HasAlerts));
+            }
+        }
+        catch (Exception ex)
+        {
+            // Cache load failure is non-critical; user can refresh manually
+            ErrorMessage = $"Failed to load cached data: {ex.Message}";
         }
     }
 

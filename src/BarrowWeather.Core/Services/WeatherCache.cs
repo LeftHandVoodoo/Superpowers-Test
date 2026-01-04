@@ -21,7 +21,11 @@ public class WeatherCache
     public async Task SaveAsync(WeatherCacheData data)
     {
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(_cacheFile, json);
+
+        // Atomic write: write to temp file, then rename
+        var tempFile = _cacheFile + ".tmp";
+        await File.WriteAllTextAsync(tempFile, json);
+        File.Move(tempFile, _cacheFile, overwrite: true);
     }
 
     public async Task<WeatherCacheData?> LoadAsync()
@@ -33,8 +37,14 @@ public class WeatherCache
             var json = await File.ReadAllTextAsync(_cacheFile);
             return JsonSerializer.Deserialize<WeatherCacheData>(json);
         }
-        catch
+        catch (JsonException)
         {
+            // Corrupted cache file - return null to trigger fresh fetch
+            return null;
+        }
+        catch (IOException)
+        {
+            // File access issue - return null to trigger fresh fetch
             return null;
         }
     }
