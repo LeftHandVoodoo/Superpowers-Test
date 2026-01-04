@@ -1,22 +1,24 @@
 # Build results
 [Dd]ebug/
+[Dd]ebugPublic/
 [Rr]elease/
+[Rr]eleases/
 x64/
 x86/
+[Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
 [Oo]bj/
-[Oo]ut/
 [Ll]og/
 [Ll]ogs/
 
 # Visual Studio
 .vs/
+*.suo
 *.user
 *.userosscache
-*.suo
 *.sln.docstates
 *.userprefs
 
@@ -28,23 +30,25 @@ bld/
 *.snupkg
 **/[Pp]ackages/*
 !**/[Pp]ackages/build/
-
-# Windows App SDK / MSIX
-*.msix
-*.appx
-*.appxbundle
-*.appxupload
-AppPackages/
-BundleArtifacts/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
 # Test results
 [Tt]est[Rr]esult*/
-*.trx
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
 
-# Misc
-*.tmp
-*.temp
-*.log
-*.cache
-.DS_Store
+# Windows image file caches
 Thumbs.db
+ehthumbs.db
+
+# Mac
+.DS_Store
+
+# Publish output
+publish/
