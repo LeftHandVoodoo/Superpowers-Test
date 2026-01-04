@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="BarrowWeather.Controls.DailyForecastCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="16">
+        <StackPanel>
+            <TextBlock Text="7-Day Forecast"
+                       Style="{StaticResource SubtitleTextBlockStyle}"
+                       Margin="0,0,0,12"/>
+            <ItemsControl x:Name="DailyList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,8,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding DayName}"
+                                       FontWeight="SemiBold"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding HighText}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding LowText}"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Description}"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       TextTrimming="CharacterEllipsis"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

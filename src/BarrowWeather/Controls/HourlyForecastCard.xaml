@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="BarrowWeather.Controls.HourlyForecastCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Padding="16">
+        <StackPanel>
+            <TextBlock Text="Hourly Forecast"
+                       Style="{StaticResource SubtitleTextBlockStyle}"
+                       Margin="0,0,0,12"/>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="HourlyList">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="16"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Width="60" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding TimeText}"
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource CaptionTextBlockStyle}"/>
+                                <TextBlock Text="{Binding TempText}"
+                                           HorizontalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           FontSize="18"
+                                           Margin="0,4,0,0"/>
+                                <TextBlock Text="{Binding PrecipText}"
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource CaptionTextBlockStyle}"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </Border>
+</UserControl>

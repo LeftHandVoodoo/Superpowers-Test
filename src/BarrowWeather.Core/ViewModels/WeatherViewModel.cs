@@ -9,6 +9,7 @@ namespace BarrowWeather.Core.ViewModels;
 public partial class WeatherViewModel : ObservableObject
 {
     private readonly IWeatherService _weatherService;
+    private readonly WeatherCache _cache = new();
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasCurrentConditions))]
@@ -43,6 +44,22 @@ public partial class WeatherViewModel : ObservableObject
     public WeatherViewModel(IWeatherService weatherService)
     {
         _weatherService = weatherService;
+        _ = LoadCachedDataAsync();
+    }
+
+    private async Task LoadCachedDataAsync()
+    {
+        var cached = await _cache.LoadAsync();
+        if (cached != null)
+        {
+            CurrentConditions = cached.CurrentConditions;
+            SunData = cached.SunData;
+            foreach (var f in cached.HourlyForecasts) HourlyForecasts.Add(f);
+            foreach (var f in cached.DailyForecasts) DailyForecasts.Add(f);
+            foreach (var a in cached.Alerts) Alerts.Add(a);
+            LastUpdated = cached.CachedAt;
+            OnPropertyChanged(nameof(HasAlerts));
+        }
     }
 
     [RelayCommand]
@@ -80,6 +97,16 @@ public partial class WeatherViewModel : ObservableObject
 
             LastUpdated = DateTime.Now;
             OnPropertyChanged(nameof(HasAlerts));
+
+            // Save to cache
+            await _cache.SaveAsync(new WeatherCacheData(
+                DateTime.Now,
+                CurrentConditions,
+                HourlyForecasts.ToList(),
+                DailyForecasts.ToList(),
+                Alerts.ToList(),
+                SunData
+            ));
         }
         catch (Exception ex)
         {
